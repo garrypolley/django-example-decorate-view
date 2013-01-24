@@ -38,3 +38,14 @@ class Decorate404(object):
         # function based view you need to return a function that takes reqeust as
         # it's first parameter, so you can have consistant behavior.
         return decorated
+
+
+def decorate_404(do_404=False):
+    def decorator(view_function):
+        @wraps(view_function)
+        def _decorated(request, *args, **kwargs):
+            if do_404:
+                raise Http404
+            return view_function(request, *args, **kwargs)
+        return _decorated
+    return decorator
